@@ -4,6 +4,12 @@ Spree::Admin::ReportsController.class_eval do
 
   def add_own
     return if Spree::Admin::ReportsController::AVAILABLE_REPORTS.has_key?(:geo_profit)
+    # this fix applied to avoid transilation missing errors for standard reports
+    Spree::Admin::ReportsController::AVAILABLE_REPORTS.each do |k, v| 
+      Spree::Admin::ReportsController::AVAILABLE_REPORTS[k][:name] = I18n.t(k)
+      Spree::Admin::ReportsController::AVAILABLE_REPORTS[k][:description] = I18n.t("#{k}_description")
+    end
+    #
     Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(ADVANCED_REPORTS)
   end
   I18n.locale = Rails.application.config.i18n.default_locale
